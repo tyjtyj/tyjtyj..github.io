@@ -13,34 +13,32 @@ var timeout = 600000; // 5 minutes
 
 var tIds;
 var d = new Date();
-//var url;
-function loadImage() {
-  d = new Date;
+var img = new Image();
+var url = '';
+function loadImage(offset) {
+  d = new Date();
   d.setHours(d.getHours() + 8 ); 
-  //d.setMinutes(d.getMinutes());
   d.setMinutes(d.getMinutes() - d.getMinutes()%5 - 5);
   url = 'https://www.nea.gov.sg/docs/default-source/rain-area/dpsri_70km_' + d.toISOString().split('.')[0].replace(/T/g,"").replace(/-/g,"").replace(/:/g,"").slice(0, -2) + '0000dbr.dpsri.png';
-  document.getElementById('rainlayer').src = url;
-  //console.log('Run...'+url);
+  img.src = url;
+
 }
+
 window.onload=function() { 
-    var img = document.getElementById('rainlayer');   
     img.onload=function(){
 	  document.getElementById('clock').innerText = d.toISOString().split('.')[0].replace(/T/g," ").replace(/-/g,"/").slice(0, -3);
-      timeout = (5.5 - d.getMinutes()%5) * 60000;
-	  
-	  clearTimeout(tIds);
+	  n = new Date();
+      timeout = (5.2 - n.getMinutes()%5) * 60000;
+      clearTimeout(tIds);
       tIds=setTimeout('loadImage()',timeout); // run again in 5mins offset minutes  
+	  document.getElementById('rainlayer').src = url;
 	} 
     img.onerror=function(){ 
-      document.getElementById('clock').innerText = 'Offline. Retrying 60s';
       clearTimeout(tIds); 
       tIds=setTimeout('loadImage()',60000); // run again in 1 minutes
-
 	}
     loadImage();
 }
-
 </script>
 </body>
 </html>
